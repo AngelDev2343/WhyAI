@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>WhyAI</title>
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="theme-color" content="#181818">
+
+    <link rel="apple-touch-icon" href="/icon/512.png">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <link rel="icon" href="icons/512.png">
+
+    <link rel="stylesheet" href="high.css">
+
+    <style>
+      body, html {
+        touch-action: none;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        background-color: #1c1c1c;
+        color: #ffffff;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      .iframe-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 9999;
+        display: none;
+      }
+      
+      iframe {
+        border: none;
+      }
+
+      /* === HEADER CON FLEXBOX === */
+      .app-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        z-index: 99999;
+        pointer-events: none;
+        width: 74%;
+        margin: 0 auto;
+      }
+
+      .app-header > * {
+        pointer-events: auto;
+      }
+
+      .header-buttons {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      /* === BOTÓN GENERAR IMAGEN === */
+      #image-gen-btn {
+        width: 33px;
+        height: 33px;
+        cursor: pointer;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        border: 1px solid #444;
+        padding: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #image-gen-btn:hover {
+        border-color: #4ade80;
+        background: linear-gradient(135deg, #202020 0%, #2f2f2f 100%);
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 4px 12px rgba(74, 222, 128, 0.2);
+      }
+
+      #image-gen-btn:active {
+        transform: scale(0.95);
+      }
+
+      /* --- INDICADOR ONLINE --- */
+      #online-indicator {
+        background-color: transparent;
+        border: 1px solid #888;
+        border-radius: 20px;
+        padding: 6px 14px;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-size: 0.85rem;
+        color: #ccc;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        transition: border-color 0.2s, background-color 0.2s;
+      }
+
+      #online-indicator:hover {
+        border-color: #aaa;
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+
+      #online-indicator::before {
+        content: "●";
+        color: #4ade80;
+        font-size: 0.75rem;
+      }
+
+      @media (max-width: 1028px) {
+        .app-header {
+          padding: 12px 16px;
+          width: initial;
+          margin: unset;
+        }
+
+        .header-buttons {
+          gap: 10px;
+        }
+
+        #image-gen-btn {
+          width: 30px;
+          height: 30px;
+        }
+
+        #online-indicator {
+          font-size: 0.8rem;
+          padding: 5px 12px;
+        }
+      }
+
+      /* --- MODAL SWITCH MODE --- */
+      .switch-modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 100001;
+        display: flex; justify-content: center; align-items: center;
+        backdrop-filter: blur(5px);
+        opacity: 0; visibility: hidden; transition: opacity 0.3s ease;
+      }
+      
+      .switch-modal-overlay.active {
+        opacity: 1; visibility: visible;
+      }
+
+      .switch-modal-box {
+        background: #2a2a2a; border: 1px solid #444;
+        padding: 20px; border-radius: 12px; max-width: 90%; width: 400px;
+        text-align: center; color: #ececec;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        margin: 20px;
+      }
+
+      .switch-modal-box h2 {
+        margin-top: 0; color: #fff; margin-bottom: 20px;
+      }
+
+      .mode-option {
+        margin-bottom: 15px;
+        padding: 16px;
+        background: #1a1a1a;
+        border-radius: 8px;
+        border: 1px solid #444;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .mode-option:last-child {
+        margin-bottom: 0;
+      }
+
+      .mode-option:hover {
+        border-color: #666;
+        background: #202020;
+      }
+
+      .mode-option.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #151515;
+        border-color: #333;
+      }
+
+      .mode-option.disabled:hover {
+        border-color: #333;
+        background: #151515;
+      }
+
+      /* Badge dinámico que se actualiza con JS */
+      .mode-option.disabled .current-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: #4ade80;
+        color: #1a1a1a;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
+
+      @media (max-width: 1028px) {
+        .mode-option.disabled .current-badge {
+          content: "✓";
+          padding: 4px 8px;
+          font-size: 1rem;
+        }
+      }
+
+      .mode-option h3 {
+        margin: 0 0 8px 0;
+        font-size: 1.1rem;
+        color: #4ade80;
+      }
+
+      .mode-option p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #aaa;
+        line-height: 1.4;
+      }
+
+      .close-switch-btn {
+        background: transparent;
+        color: #888;
+        border: 1px solid #444;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: normal;
+        cursor: pointer;
+        margin-top: 15px;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+        display: inline-block;
+        text-decoration: none;
+      }
+
+      .close-switch-btn:hover {
+        border-color: #666;
+        color: #ccc;
+      }
+
+      /* --- MODAL BIENVENIDA NUEVO USUARIO --- */
+      .welcome-modal-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 100002;
+        display: flex; justify-content: center; align-items: center;
+        backdrop-filter: blur(5px);
+        opacity: 0; visibility: hidden; transition: opacity 0.3s ease;
+      }
+      
+      .welcome-modal-overlay.active {
+        opacity: 1; visibility: visible;
+      }
+
+      .welcome-modal-box {
+        background: #2a2a2a; border: 1px solid #444;
+        padding: 15px;
+        border-radius: 12px;
+        max-width: 90%;
+        width: 450px;
+        text-align: center;
+        color: #ececec;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        margin: 15px;
+      }
+
+      .welcome-modal-box h2 {
+        margin-top: 0; color: #fff; margin-bottom: 15px; font-size: 1.5rem;
+      }
+
+      .welcome-modal-box p {
+        margin: 0 0 20px 0;
+        color: #ccc;
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
+      .welcome-modal-box .highlight {
+        color: #4ade80;
+        font-weight: bold;
+      }
+
+      .welcome-modal-box .button-highlight {
+        background: #1a1a1a;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border: 1px solid #1e703c;
+        color: #4ade80;
+        font-size: 0.9rem;
+      }
+
+      .welcome-btn {
+        background: #4ade80;
+        color: #1a1a1a;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1rem;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        transition: all 0.2s;
+      }
+
+      .welcome-btn:hover {
+        background: #5ae890;
+        transform: translateY(-2px);
+      }
+
+      .welcome-btn:active {
+        transform: translateY(0);
+      }
+
+      /* --- TOAST OFFLINE --- */
+      #offline-toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: rgba(42, 42, 42, 0.85);
+        backdrop-filter: blur(10px);
+        color: #ccc;
+        padding: 10px 18px;
+        border-radius: 20px;
+        border: 1px solid rgba(136, 136, 136, 0.3);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-size: 0.85rem;
+        z-index: 100003;
+        opacity: 0;
+        transition: all 0.4s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        max-width: 90%;
+        text-align: center;
+      }
+
+      #offline-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      #offline-toast::before {
+        color: #888;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 768px) {
+        #offline-toast {
+          bottom: 15px;
+          padding: 8px 16px;
+          font-size: 0.8rem;
+        }
+
+        #offline-toast::before {
+          font-size: 1.3rem;
+        }
+      }
+
+      .off-msg {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .off-msg img {
+        width: 150px;
+        height: 150px;
+      }
+
+      .off-msg p {
+        width: 68%;
+        text-align: center;
+      }
+
+      /* ========================================
+         MODAL GENERADOR DE IMÁGENES MEJORADO
+         ======================================== */
+      
+      .image-modal-box {
+        background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+        border: 1px solid #555;
+        padding: 25px;
+        border-radius: 16px;
+        max-width: 95%;
+        width: 550px;
+        max-height: 90vh;
+        overflow-y: auto;
+        text-align: center;
+        color: #ececec;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        margin: 20px;
+      }
+
+      .image-modal-box::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .image-modal-box::-webkit-scrollbar-track {
+        background: #1a1a1a;
+        border-radius: 10px;
+      }
+
+      .image-modal-box::-webkit-scrollbar-thumb {
+        background: #4ade80;
+        border-radius: 10px;
+      }
+
+      .image-modal-box h2 {
+        margin-top: 0;
+        color: #fff;
+        margin-bottom: 8px;
+        font-size: 1.8rem;
+        background: linear-gradient(135deg, #4ade80 0%, #3bc96f 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .image-modal-subtitle {
+        color: #999;
+        font-size: 0.9rem;
+        margin-bottom: 25px;
+        font-weight: normal;
+      }
+
+      /* Sugerencias de prompts */
+      .suggestions {
+        margin-bottom: 20px;
+      }
+
+      .suggestions-title {
+        font-size: 0.85rem;
+        color: #999;
+        margin-bottom: 10px;
+        text-align: left;
+      }
+
+      .suggestion-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .suggestion-chip {
+        background: #1a1a1a;
+        border: 1px solid #444;
+        color: #aaa;
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .suggestion-chip:hover {
+        background: #4ade80;
+        color: #1a1a1a;
+        border-color: #4ade80;
+      }
+
+      /* Área de prompt mejorada */
+      .prompt-container {
+        position: relative;
+        margin-bottom: 25px;
+      }
+
+      #image-prompt {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: 2px solid #444;
+        background: #1a1a1a;
+        color: #fff;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      #image-prompt:focus {
+        outline: none;
+        border-color: #4ade80;
+        background: #1f1f1f;
+        box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+      }
+
+      #image-prompt::placeholder {
+        color: #666;
+      }
+
+      .char-counter {
+        position: absolute;
+        bottom: -20px;
+        right: 8px;
+        font-size: 0.75rem;
+        color: #666;
+      }
+
+      /* Selector de estilo */
+      .option-group {
+        text-align: left;
+        margin-bottom: 20px;
+      }
+
+      .option-label {
+        display: block;
+        font-size: 0.85rem;
+        color: #aaa;
+        margin-bottom: 6px;
+        font-weight: 500;
+      }
+
+      .option-select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #444;
+        background: #1a1a1a;
+        color: #fff;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .option-select:hover {
+        border-color: #555;
+        background: #1f1f1f;
+      }
+
+      .option-select:focus {
+        outline: none;
+        border-color: #4ade80;
+      }
+
+      /* Botón generar mejorado */
+      .generate-btn {
+        background: linear-gradient(135deg, #4ade80 0%, #3bc96f 100%);
+        color: #1a1a1a;
+        border: none;
+        padding: 14px 40px;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1rem;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .generate-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #5ae890 0%, #4bd980 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(74, 222, 128, 0.4);
+      }
+
+      .generate-btn:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background: #444;
+      }
+
+      /* Estado de carga */
+      .loading-spinner {
+        display: none;
+        margin: 20px auto;
+        width: 50px;
+        height: 50px;
+        border: 4px solid #333;
+        border-top-color: #4ade80;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      .loading-spinner.active {
+        display: block;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      .loading-text {
+        display: none;
+        color: #aaa;
+        font-size: 0.9rem;
+        margin-top: 10px;
+      }
+
+      .loading-text.active {
+        display: block;
+      }
+
+      /* Resultado de imagen mejorado */
+      #image-result {
+        margin-top: 25px;
+        display: none;
+        animation: fadeInUp 0.5s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      #generated-image {
+        width: 100%;
+        display: block;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        border: 2px solid #333;
+        transition: border-color 0.3s;
+      }
+
+      #generated-image:hover {
+        border-color: #4ade80;
+      }
+
+      /* Botones de acción */
+      .action-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .action-btn {
+        background: #1a1a1a;
+        color: #4ade80;
+        border: 1px solid #4ade80;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .action-btn:hover {
+        background: #4ade80;
+        color: #1a1a1a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .image-modal-box {
+          padding: 20px;
+          width: 95%;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+
+        .action-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+      
+    </style>
+</head>
+<body>
+
+<!-- === HEADER CON TÍTULO Y BOTONES === -->
+<header class="app-header">
+  <div></div>
+  <div class="header-buttons">
+    <img id="image-gen-btn" src="generar.png" onclick="abrirImageModal()" title="Generar imagen" alt="Generar imagen" />
+    <div id="online-indicator" onclick="abrirSwitchModal()">Online Mode</div>
+  </div>
+</header>
+
+<!-- MODAL BIENVENIDA -->
+<div class="welcome-modal-overlay" id="welcome-modal">
+  <div class="welcome-modal-box">
+    <h2 id="welcome-title">¡Bienvenido a WhyAI!</h2>
+    <p id="welcome-text">Esta IA tiene una <span class="highlight">versión sin conexión</span>. Si te interesa usarla sin internet:</p>
+    <div class="button-highlight" id="welcome-button">
+      Pulsa el botón de la esquina superior derecha, después de esta pantalla.
+    </div>
+    <p id="welcome-footer">Podrás instalar la versión offline y usarla en cualquier momento sin conexión a internet.</p>
+    <button class="welcome-btn" onclick="cerrarWelcomeModal()" id="welcome-btn">Entendido</button>
+  </div>
+</div>
+
+<!-- MODAL SWITCH MODE -->
+<div class="switch-modal-overlay" id="switch-modal">
+  <div class="switch-modal-box">
+    <h2 id="switch-title">Switch Mode</h2>
+    
+    <div class="mode-option disabled" id="online-mode-option" onclick="">
+      <span class="current-badge" id="current-mode-badge">Current Mode</span>
+      <h3>🌐 Online Mode</h3>
+      <p id="online-desc">Connect to the internet for cloud-based features and updates.</p>
+    </div>
+
+    <div class="mode-option" onclick="irOffline()">
+      <h3>📱 Offline Mode</h3>
+      <p id="offline-desc">Use WhyAI completely offline with local models.</p>
+    </div>
+
+    <button class="close-switch-btn" onclick="cerrarSwitchModal()" id="close-switch-btn">Close</button>
+  </div>
+</div>
+
+<!-- === MODAL GENERADOR DE IMÁGENES MEJORADO === -->
+<div class="switch-modal-overlay" id="image-modal">
+  <div class="image-modal-box">
+    <h2 id="img-title">Generador de Imágenes</h2>
+    <p class="image-modal-subtitle" id="img-subtitle" style="margin-bottom: 0px;">Crea imágenes con inteligencia artificial</p>
+    <p style="color:#999; font-size: 0.7rem; margin-top: 2px;">Powered by Pollinations AI</p>
+    <p style="color:#ff9800; font-size: 0.8rem; margin-top: 8px; font-weight: 600;" id="img-limit">⚠️ Límite: 1 imagen por día por IP</p>
+
+    <!-- Mensaje de bloqueo (oculto por defecto) -->
+    <div id="blocked-message" style="display: none; background: #ff5722; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+      <h3 style="margin: 0 0 8px 0; font-size: 1.1rem;" id="img-blocked">Ya generaste tu imagen de hoy</h3>
+      <p style="margin: 0; font-size: 0.9rem;" id="img-try-tomorrow">Podrás generar otra imagen mañana. El límite se restablece cada 24 horas.</p>
+    </div>
+
+    <!-- Sugerencias -->
+    <div class="suggestions">
+      <div class="suggestions-title" id="suggestions-title">Sugerencias:</div>
+      <div class="suggestion-chips">
+        <span class="suggestion-chip" onclick="usarSugerencia(this)" data-es="Un gato astronauta en el espacio" data-en="An astronaut cat in space">Gato astronauta</span>
+        <span class="suggestion-chip" onclick="usarSugerencia(this)" data-es="Paisaje futurista con neón" data-en="Futuristic neon landscape">Paisaje futurista</span>
+        <span class="suggestion-chip" onclick="usarSugerencia(this)" data-es="Dragón majestuoso volando" data-en="Majestic dragon flying">Dragón</span>
+        <span class="suggestion-chip" onclick="usarSugerencia(this)" data-es="Bosque mágico bioluminiscente" data-en="Magical bioluminescent forest">Bosque mágico</span>
+      </div>
+    </div>
+
+    <!-- Prompt -->
+    <div class="prompt-container">
+      <textarea
+        id="image-prompt"
+        placeholder="Describe la imagen que quieres generar..."
+        maxlength="500"
+        oninput="actualizarContador()"
+      ></textarea>
+      <div class="char-counter" id="char-counter">0/500</div>
+    </div>
+
+    <!-- Selector de estilo -->
+    <div class="option-group">
+      <label class="option-label" id="style-label">Estilo</label>
+      <select class="option-select" id="image-style">
+        <option value="" id="style-none">Sin estilo específico</option>
+        <option value="photorealistic" id="style-photo">Fotorrealista</option>
+        <option value="anime" id="style-anime">Anime</option>
+        <option value="oil painting" id="style-oil">Pintura al óleo</option>
+        <option value="watercolor" id="style-water">Acuarela</option>
+        <option value="digital art" id="style-digital">Arte digital</option>
+        <option value="3d render" id="style-3d">Render 3D</option>
+        <option value="cyberpunk" id="style-cyber">Cyberpunk</option>
+        <option value="cartoon" id="style-cartoon">Caricatura</option>
+        <option value="sketch" id="style-sketch">Boceto</option>
+      </select>
+    </div>
+
+    <!-- Botón generar -->
+    <button class="generate-btn" onclick="generarImagen()" id="img-generate-btn">
+      Generar Imagen
+    </button>
+
+    <!-- Loading -->
+    <div class="loading-spinner" id="loading-spinner"></div>
+    <div class="loading-text" id="loading-text">Generando tu imagen...</div>
+
+    <!-- Resultado -->
+    <div id="image-result">
+      <img id="generated-image" alt="Imagen generada">
+      
+      <div class="action-buttons">
+        <button class="action-btn" onclick="descargarImagen()">
+          <span id="download-text">Descargar</span>
+        </button>
+      </div>
+    </div>
+
+    <button class="close-switch-btn" onclick="cerrarImageModal()" id="img-close-btn">
+      Cerrar
+    </button>
+  </div>
+</div>
+
+<!-- Toast Offline -->
+<div id="offline-toast"></div>
+
+<!-- Contenedor iframe -->
+<div class="iframe-container">
+  <iframe src="https://whyia-chat221.vercel.app/" width="100%" height="100%"></iframe>
+</div>
+
+<!-- Mensaje sin conexión -->
+<div class="off-msg">
+  <img src="image.png" alt="No internet connection.">
+  <h1 id="offline-msg-title">Sin conexión</h1>
+  <p id="offline-msg-text">No te preocupes: WhyAI cuenta con un modo 'Offline', que te permite seguir disfrutando de la inteligencia artificial sin necesidad de conexión a Internet, siempre que la hayas descargado previamente.</p>
+</div>
+
+<script>
+  const translations = {
+    es: {
+      welcomeTitle: "¡Bienvenido a WhyAI!",
+      welcomeText: "Esta IA tiene una <span class=\"highlight\">versión sin conexión</span>. Si te interesa usarla sin internet:",
+      welcomeButton: "Pulsa el botón de la esquina superior derecha, después de esta pantalla.",
+      welcomeFooter: "Podrás instalar la versión offline y usarla en cualquier momento sin conexión a internet.",
+      welcomeBtn: "Entendido",
+      switchTitle: "Cambiar Modo",
+      onlineDesc: "Conecta a internet para funciones basadas en la nube y actualizaciones.",
+      offlineDesc: "Usa WhyAI completamente offline con modelos locales.",
+      closeSwitchBtn: "Cerrar",
+      currentModeBadge: "✓ Modo Actual",
+      currentModeBadgeMobile: "✓",
+      offlineToast: "Sin conexión a internet. Cambia a Modo Offline si lo has descargado.",
+      offlineMsgTitle: "Sin conexión",
+      offlineMsgText: "No te preocupes: WhyAI cuenta con un modo 'Offline', que te permite seguir disfrutando de la inteligencia artificial sin necesidad de conexión a Internet, siempre que la hayas descargado previamente.",
+      imgTitle: "Generador de Imágenes",
+      imgSubtitle: "Crea imágenes con inteligencia artificial",
+      imgLimit: "⚠️ Límite: 1 imagen por día por IP",
+      imgPlaceholder: "Describe la imagen que quieres generar...",
+      imgGenerate: "Generar Imagen",
+      imgDownload: "Descargar",
+      imgNew: "Nueva imagen",
+      imgClose: "Cerrar",
+      imgBlocked: "Ya generaste tu imagen de hoy",
+      imgTryTomorrow: "Podrás generar otra imagen mañana. El límite se restablece cada 24 horas.",
+      styleLabel: "Estilo",
+      suggestionsTitle: "Sugerencias:",
+      loadingText: "Generando tu imagen...",
+      promptError: "Por favor, describe la imagen que deseas generar",
+      downloadError: "Error al descargar la imagen",
+      generationError: "Error al generar la imagen. Inténtalo de nuevo.",
+      generationTimeout: "Tiempo de espera agotado. El servidor está ocupado, intenta de nuevo.",
+      styleNone: "Sin estilo específico",
+      stylePhoto: "Fotorrealista",
+      styleAnime: "Anime",
+      styleOil: "Pintura al óleo",
+      styleWater: "Acuarela",
+      styleDigital: "Arte digital",
+      style3d: "Render 3D",
+      styleCyber: "Cyberpunk",
+      styleCartoon: "Caricatura",
+      styleSketch: "Boceto"
+    },
+    en: {
+      welcomeTitle: "Welcome to WhyAI!",
+      welcomeText: "This AI has an <span class=\"highlight\">offline version</span>. If you're interested in using it without internet:",
+      welcomeButton: "Tap the button in the top right corner, after this screen.",
+      welcomeFooter: "You'll be able to install the offline version and use it anytime without internet connection.",
+      welcomeBtn: "Got it",
+      switchTitle: "Switch Mode",
+      onlineDesc: "Connect to the internet for cloud-based features and updates.",
+      offlineDesc: "Use WhyAI completely offline with local models.",
+      closeSwitchBtn: "Close",
+      currentModeBadge: "✓ Current Mode",
+      currentModeBadgeMobile: "✓",
+      offlineToast: "No internet connection. Switch to Offline Mode if you've downloaded it.",
+      offlineMsgTitle: "No connection",
+      offlineMsgText: "Don't worry: WhyAI has an 'Offline' mode that lets you continue enjoying AI without internet connection, as long as you've downloaded it previously.",
+      imgTitle: "AI Image Generator",
+      imgSubtitle: "Create amazing images with artificial intelligence",
+      imgLimit: "⚠️ Limit: 1 image per day per IP",
+      imgPlaceholder: "Describe the image you want to generate...",
+      imgGenerate: "Generate Image",
+      imgDownload: "Download",
+      imgNew: "New image",
+      imgClose: "Close",
+      imgBlocked: "You already generated your image today",
+      imgTryTomorrow: "You can generate another image tomorrow. The limit resets every 24 hours.",
+      styleLabel: "Style",
+      suggestionsTitle: "Quick suggestions:",
+      loadingText: "Generating your image...",
+      promptError: "Please describe the image you want to generate",
+      downloadError: "Error downloading image",
+      generationError: "Error generating image. Please try again.",
+      generationTimeout: "Request timeout. Server is busy, please try again.",
+      styleNone: "No specific style",
+      stylePhoto: "Photorealistic",
+      styleAnime: "Anime",
+      styleOil: "Oil painting",
+      styleWater: "Watercolor",
+      styleDigital: "Digital art",
+      style3d: "3D render",
+      styleCyber: "Cyberpunk",
+      styleCartoon: "Cartoon",
+      styleSketch: "Sketch"
+    }
+  };
+
+  let currentLang = 'en';
+  let currentImageUrl = '';
+
+  // ✅ FUNCIONES MODAL GENERADOR DE IMÁGENES CON POLLINATIONS AI
+  function usarSugerencia(element) {
+    const prompt = currentLang === 'es' ? element.dataset.es : element.dataset.en;
+    document.getElementById('image-prompt').value = prompt;
+    actualizarContador();
+  }
+
+  function actualizarContador() {
+    const prompt = document.getElementById('image-prompt').value;
+    document.getElementById('char-counter').textContent = `${prompt.length}/500`;
+  }
+
+  function abrirImageModal() {
+    const modal = document.getElementById('image-modal');
+    modal.classList.add('active');
+    
+    // Verificar si ya generó hoy
+    const lastGenerated = localStorage.getItem('whyai-last-image-date');
+    const today = new Date().toDateString();
+    
+    if (lastGenerated === today) {
+      // Ya generó hoy - mostrar mensaje de bloqueo y deshabilitar formulario
+      document.getElementById('blocked-message').style.display = 'block';
+      document.getElementById('image-prompt').disabled = true;
+      document.getElementById('image-style').disabled = true;
+      document.getElementById('img-generate-btn').disabled = true;
+      document.querySelector('.suggestions').style.display = 'none';
+      
+      // Mostrar la última imagen si existe
+      const lastImageUrl = localStorage.getItem('whyai-last-image-url');
+      if (lastImageUrl) {
+        currentImageUrl = lastImageUrl;
+        document.getElementById('generated-image').src = lastImageUrl;
+        document.getElementById('image-result').style.display = 'block';
+      }
+    } else {
+      // Resetear el modal para un nuevo día
+      document.getElementById('blocked-message').style.display = 'none';
+      document.getElementById('image-prompt').disabled = false;
+      document.getElementById('image-prompt').value = '';
+      document.getElementById('image-style').disabled = false;
+      document.getElementById('img-generate-btn').disabled = false;
+      document.getElementById('image-result').style.display = 'none';
+      document.querySelector('.suggestions').style.display = 'block';
+      actualizarContador();
+    }
+  }
+
+  function cerrarImageModal() {
+    document.getElementById('image-modal').classList.remove('active');
+  }
+
+  async function generarImagen() {
+    // Verificar si ya generó hoy
+    const lastGenerated = localStorage.getItem('whyai-last-image-date');
+    const today = new Date().toDateString();
+    
+    if (lastGenerated === today) {
+      // Ya generó hoy - mostrar mensaje de bloqueo
+      document.getElementById('blocked-message').style.display = 'block';
+      document.getElementById('image-prompt').disabled = true;
+      document.getElementById('image-style').disabled = true;
+      document.getElementById('img-generate-btn').disabled = true;
+      
+      // Ocultar sugerencias
+      document.querySelector('.suggestions').style.display = 'none';
+      return;
+    }
+
+    const prompt = document.getElementById('image-prompt').value.trim();
+    if (!prompt) {
+      alert(translations[currentLang].promptError);
+      return;
+    }
+
+    const style = document.getElementById('image-style').value;
+    const finalPrompt = style ? `${prompt}, ${style} style` : prompt;
+
+    const generateBtn = document.getElementById('img-generate-btn');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const loadingText = document.getElementById('loading-text');
+    
+    generateBtn.disabled = true;
+    loadingSpinner.classList.add('active');
+    loadingText.classList.add('active');
+    document.getElementById('image-result').style.display = 'none';
+
+    try {
+      // Usar Pollinations AI API - cargar directamente en img tag
+      const encodedPrompt = encodeURIComponent(finalPrompt);
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=1024&nologo=true`;
+      
+      currentImageUrl = imageUrl;
+      
+      // Crear imagen con timeout
+      const img = new Image();
+      let timeoutId;
+      
+      const loadPromise = new Promise((resolve, reject) => {
+        timeoutId = setTimeout(() => {
+          reject(new Error('timeout'));
+        }, 60000);
+        
+        img.onload = () => {
+          clearTimeout(timeoutId);
+          resolve();
+        };
+        
+        img.onerror = () => {
+          clearTimeout(timeoutId);
+          reject(new Error('Error al cargar la imagen'));
+        };
+        
+        img.src = imageUrl;
+      });
+
+      await loadPromise;
+      
+      // Guardar fecha de generación
+      localStorage.setItem('whyai-last-image-date', today);
+      localStorage.setItem('whyai-last-image-url', imageUrl);
+      
+      // Mostrar la imagen
+      document.getElementById('generated-image').src = imageUrl;
+      loadingSpinner.classList.remove('active');
+      loadingText.classList.remove('active');
+      document.getElementById('image-result').style.display = 'block';
+      
+      // Bloquear el formulario
+      document.getElementById('image-prompt').disabled = true;
+      document.getElementById('image-style').disabled = true;
+      document.querySelector('.suggestions').style.display = 'none';
+      
+      // Mostrar mensaje de bloqueo
+      document.getElementById('blocked-message').style.display = 'block';
+
+    } catch (error) {
+      console.error('Error completo:', error);
+      loadingSpinner.classList.remove('active');
+      loadingText.classList.remove('active');
+      generateBtn.disabled = false;
+      
+      let errorMessage = translations[currentLang].generationError;
+      
+      if (error.message === 'timeout') {
+        errorMessage = translations[currentLang].generationTimeout + '\n\nLa API puede estar saturada. Intenta de nuevo en unos momentos.';
+      } else if (error.message) {
+        errorMessage += '\n\n' + error.message;
+      }
+      
+      alert(errorMessage);
+    }
+  }
+
+  async function descargarImagen() {
+    if (!currentImageUrl) return;
+    
+    try {
+      // Hacer fetch de la imagen para descargarla como blob
+      const response = await fetch(currentImageUrl);
+      const blob = await response.blob();
+      
+      // Crear URL del blob y descargar
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `whyai-${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      // Limpiar URL del blob
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Error:', error);
+      // Si fetch falla, intentar descarga directa
+      const a = document.createElement('a');
+      a.href = currentImageUrl;
+      a.download = `whyai-${Date.now()}.png`;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  }
+
+  function nuevaImagen() {
+    document.getElementById('image-prompt').value = '';
+    document.getElementById('image-result').style.display = 'none';
+    actualizarContador();
+  }
+
+  // ✅ SOLO IDIOMA DEL NAVEGADOR
+  function detectarIdioma() {
+    const userLang = navigator.language || navigator.userLanguage || 'en';
+    const language = userLang.toLowerCase().startsWith('es') ? 'es' : 'en';
+    aplicarIdioma(language);
+  }
+
+  function aplicarIdioma(lang) {
+    currentLang = lang;
+    const t = translations[lang] || translations.en;
+
+    // ✅ TRADUCIR WELCOME MODAL
+    document.getElementById('welcome-title').textContent = t.welcomeTitle;
+    document.getElementById('welcome-text').innerHTML = t.welcomeText;
+    document.getElementById('welcome-button').textContent = t.welcomeButton;
+    document.getElementById('welcome-footer').textContent = t.welcomeFooter;
+    document.getElementById('welcome-btn').textContent = t.welcomeBtn;
+
+    // ✅ TRADUCIR SWITCH MODAL
+    document.getElementById('switch-title').textContent = t.switchTitle;
+    document.getElementById('online-desc').textContent = t.onlineDesc;
+    document.getElementById('offline-desc').textContent = t.offlineDesc;
+    document.getElementById('close-switch-btn').textContent = t.closeSwitchBtn;
+
+    // ✅ ACTUALIZAR EL BADGE DINÁMICAMENTE
+    const badge = document.getElementById('current-mode-badge');
+    const isMobile = window.innerWidth <= 1028;
+    badge.textContent = isMobile ? t.currentModeBadgeMobile : t.currentModeBadge;
+
+    // ✅ TRADUCIR MENSAJE OFFLINE
+    document.getElementById('offline-msg-title').textContent = t.offlineMsgTitle;
+    document.getElementById('offline-msg-text').textContent = t.offlineMsgText;
+
+    // ✅ TRADUCIR MODAL GENERADOR DE IMÁGENES
+    document.getElementById('img-title').textContent = t.imgTitle;
+    document.getElementById('img-subtitle').textContent = t.imgSubtitle;
+    document.getElementById('img-limit').textContent = t.imgLimit;
+    document.getElementById('img-blocked').textContent = t.imgBlocked;
+    document.getElementById('img-try-tomorrow').textContent = t.imgTryTomorrow;
+    document.getElementById('image-prompt').placeholder = t.imgPlaceholder;
+    document.getElementById('img-generate-btn').textContent = t.imgGenerate;
+    document.getElementById('download-text').textContent = t.imgDownload;
+    document.getElementById('img-close-btn').textContent = t.imgClose;
+    document.getElementById('style-label').textContent = t.styleLabel;
+    document.getElementById('suggestions-title').textContent = t.suggestionsTitle;
+    document.getElementById('loading-text').textContent = t.loadingText;
+
+    // ✅ TRADUCIR OPCIONES DEL SELECTOR DE ESTILO
+    document.getElementById('style-none').textContent = t.styleNone;
+    document.getElementById('style-photo').textContent = t.stylePhoto;
+    document.getElementById('style-anime').textContent = t.styleAnime;
+    document.getElementById('style-oil').textContent = t.styleOil;
+    document.getElementById('style-water').textContent = t.styleWater;
+    document.getElementById('style-digital').textContent = t.styleDigital;
+    document.getElementById('style-3d').textContent = t.style3d;
+    document.getElementById('style-cyber').textContent = t.styleCyber;
+    document.getElementById('style-cartoon').textContent = t.styleCartoon;
+    document.getElementById('style-sketch').textContent = t.styleSketch;
+  }
+
+  // ✅ ACTUALIZAR EL BADGE AL CAMBIAR EL TAMAÑO DE LA VENTANA
+  window.addEventListener('resize', () => {
+    const t = translations[currentLang];
+    const badge = document.getElementById('current-mode-badge');
+    const isMobile = window.innerWidth <= 1028;
+    badge.textContent = isMobile ? t.currentModeBadgeMobile : t.currentModeBadge;
+  });
+
+  function abrirSwitchModal() {
+    document.getElementById('switch-modal').classList.add('active');
+  }
+
+  function cerrarSwitchModal() {
+    document.getElementById('switch-modal').classList.remove('active');
+  }
+
+  function cerrarWelcomeModal() {
+    document.getElementById('welcome-modal').classList.remove('active');
+    localStorage.setItem('whyai-visited', 'true');
+  }
+
+  function mostrarWelcomeModal() {
+    if (!localStorage.getItem('whyai-visited')) {
+      setTimeout(() => {
+        document.getElementById('welcome-modal').classList.add('active');
+      }, 500);
+    }
+  }
+
+  function irOffline() {
+    window.location.href = 'offline.html';
+  }
+
+  function mostrarToastOffline() {
+    const toast = document.getElementById('offline-toast');
+    toast.textContent = translations[currentLang].offlineToast;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 5000);
+  }
+
+  window.addEventListener('offline', mostrarToastOffline);
+  window.addEventListener('online', () => {
+    document.getElementById('offline-toast').classList.remove('show');
+  });
+
+  // ✅ DETECTOR DE INTERNET PARA IFRAME (MEJORADO)
+  function verificarConexion() {
+    const iframeContainer = document.querySelector('.iframe-container');
+    const offMsg = document.querySelector('.off-msg');
+    
+    if (navigator.onLine) {
+      // Hay internet - mostrar iframe, ocultar mensaje offline
+      iframeContainer.style.display = 'block';
+      offMsg.style.display = 'none';
+    } else {
+      // No hay internet - ocultar iframe, mostrar mensaje offline
+      iframeContainer.style.display = 'none';
+      offMsg.style.display = 'flex';
+    }
+  }
+
+  // Verificación más robusta al cargar
+  function verificarConexionInicial() {
+    // Intentar hacer una petición al servidor del iframe para verificar conexión real
+    fetch('https://whyia-chat221.vercel.app/', { 
+      mode: 'no-cors',
+      cache: 'no-store'
+    })
+    .then(() => {
+      // Hay conexión real
+      const iframeContainer = document.querySelector('.iframe-container');
+      const offMsg = document.querySelector('.off-msg');
+      iframeContainer.style.display = 'block';
+      offMsg.style.display = 'none';
+    })
+    .catch(() => {
+      // No hay conexión real
+      const iframeContainer = document.querySelector('.iframe-container');
+      const offMsg = document.querySelector('.off-msg');
+      iframeContainer.style.display = 'none';
+      offMsg.style.display = 'flex';
+    });
+  }
+
+  // Verificar conexión al cargar la página con método robusto
+  verificarConexionInicial();
+
+  // Escuchar cambios en la conexión en tiempo real
+  window.addEventListener('online', verificarConexion);
+  window.addEventListener('offline', verificarConexion);
+
+  // Inicializar
+  detectarIdioma();
+  mostrarWelcomeModal();
+
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/ia-offline/sw.js');
+    });
+  }
+
+</script>
+
+</body>
+
+</html>

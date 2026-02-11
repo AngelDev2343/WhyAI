@@ -1,0 +1,23 @@
+/* --- QUITAR HIGHLIGHT AL PRESIONAR EN MÓVILES --- */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Permitir selección de texto solo donde sea necesario */
+  input,
+  textarea,
+  .message p,
+  .message code,
+  .message pre {
+    -webkit-user-select: text;
+    -khtml-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }

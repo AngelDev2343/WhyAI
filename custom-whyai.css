@@ -1,0 +1,221 @@
+/* ===================================
+   WHYAI CUSTOM THEME - DARK MODE
+   (SOLO PARA ESCRITORIO / TABLETS GRANDES)
+   =================================== */
+
+   @media screen and (min-width: 768px) {
+
+    /* Variables personalizadas */
+    :root {
+        --whyai-bg: #1c1c1c;
+        --whyai-text: #f0f0f0;
+        --whyai-bubble-user: #3a3a3a;
+        --whyai-bubble-ai: #2a2a2a;
+        --whyai-input-bg: #2b2b2b;
+        --whyai-border: #444;
+        --whyai-button: #333;
+        --whyai-button-hover: #444;
+        --whyai-code-bg: #121212;
+      }
+      
+      /* Fondo principal */
+      body,
+      #root,
+      .drawer-content {
+        background-color: var(--whyai-bg) !important;
+        color: var(--whyai-text) !important;
+      }
+      
+      /* Header / Título */
+      .navbar {
+        background-color: var(--whyai-bg) !important;
+        border-bottom: 1px solid #333 !important;
+        padding: 20px 20px 10px 20px !important;
+      }
+      
+      .navbar .text-2xl {
+        font-size: 1.25rem !important;
+        font-weight: normal !important;
+        opacity: 0.8 !important;
+      }
+      
+      /* Ocultar botones header originales que no queremos en Desktop */
+      .navbar .btn-ghost,
+      .navbar button {
+        /* Opcional: si quieres ocultar cosas específicas del header */
+      }
+    
+      /* ÁREA DE CHAT */
+      
+      /* Mensaje del Usuario */
+      .chat-end .chat-bubble {
+        background-color: var(--whyai-bubble-user) !important;
+        color: var(--whyai-text) !important;
+        border-radius: 18px 18px 4px 18px !important; /* Forma estética */
+        border: 1px solid var(--whyai-border) !important;
+      }
+      
+      /* Mensaje de la IA */
+      .chat-start .chat-bubble {
+        background-color: var(--whyai-bubble-ai) !important;
+        color: var(--whyai-text) !important;
+        border-radius: 18px 18px 18px 4px !important;
+        border: 1px solid var(--whyai-border) !important;
+      }
+      
+      /* Markdown y Código */
+      .prose {
+        color: var(--whyai-text) !important;
+      }
+      
+      pre {
+        background-color: var(--whyai-code-bg) !important;
+        border: 1px solid #333 !important;
+        border-radius: 8px !important;
+      }
+      
+      code {
+        color: #e6e6e6 !important;
+        background-color: #333 !important;
+        padding: 2px 5px;
+        border-radius: 4px;
+      }
+    
+      /* ÁREA DE INPUT (TEXTAREA) */
+      textarea {
+        background-color: var(--whyai-input-bg) !important;
+        border: 1px solid var(--whyai-border) !important;
+        color: var(--whyai-text) !important;
+        border-radius: 12px !important;
+      }
+      
+      textarea:focus {
+        outline: none !important;
+        border-color: #666 !important;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+      }
+    
+      /* Botones (Enviar, Stop, etc) */
+      .btn {
+        background-color: none !important;
+        border: none !important;
+        color: var(--whyai-text) !important;
+        margin-bottom: 5px;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+      
+      .btn:hover {
+        background-color: none !important;
+      }
+      .model-management .btn {
+        border: 1px solid #737eff !important;
+      }
+      /* Sidebar / Drawer (Menú lateral) */
+      .drawer-side .menu {
+        background-color: transparent !important;
+        color: #ccc !important;
+        border: none !important;
+      }
+      
+      .drawer-side li a:hover {
+        background-color: #333 !important;
+        color: #fff !important;
+      }
+    
+      /* Ajustes generales de scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+        background: #1c1c1c;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: #333;
+        border-radius: 5px;
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: #444;
+      }
+    
+      /* Dropdowns y Menús flotantes */
+      .dropdown-content {
+        background-color: #252525 !important;
+        border: 1px solid var(--whyai-border) !important;
+        color: var(--whyai-text) !important;
+      }
+      
+      /* Progress bar */
+      .progress {
+        background-color: #2a2a2a !important;
+      }
+      
+      /* Alerts */
+      .alert {
+        background-color: #2a2a2a !important;
+        border: 1px solid #444 !important;
+        color: var(--whyai-text) !important;
+      }
+      
+      /* Modal */
+      .modal-box {
+        background-color: #2a2a2a !important;
+        color: var(--whyai-text) !important;
+      }
+      
+      /* Disclaimer */
+      .text-xs.opacity-70,
+      small {
+        color: #d1d1d1 !important;
+        text-align: center;
+        margin-top: 10px;
+      }
+      
+      /* CRÉDITOS en la esquina */
+      .credits {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(42, 42, 42, 0.95);
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        color: #888;
+        border: 1px solid #333;
+        z-index: 9999;
+        pointer-events: none;
+      }
+      
+      .credits a {
+        color: #ccc;
+        text-decoration: none;
+        font-weight: bold;
+        pointer-events: auto; 
+      }
+  }
+  
+  /* ===================================
+     AJUSTES PARA MÓVILES (OPCIONAL)
+     Aquí puedes poner correcciones si algo se ve mal en móvil
+     =================================== */
+  
+  @media screen and (max-width: 767px) {
+      /* Por ejemplo, aseguramos que los créditos no estorben en móvil
+         o los ocultamos si prefieres */
+      .credits {
+          display: none; /* Ocultar créditos flotantes en móvil para más espacio */
+          /* O si los quieres abajo estáticos: */
+          /* position: relative; 
+          text-align: center;
+          padding: 20px;
+          background: transparent;
+          border: none;
+          */
+      }
+
+  }
+
+
+.btn-primary {
+   color: white !important;
+}
