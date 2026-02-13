@@ -276,8 +276,12 @@ Se agradece especialmente:
 
 ---
 
-## 🖥️ Capturas
+## 🖥️ Demo
 
+<div align="center">
+  
+[¡Proba ahora aquí!](https://AngelSPerez.github.io/ia-offline)
+  
 ![demo](https://angeldev2343.github.io/land/gifs/1.gif)
 <img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/6b882ab5-e14f-4616-be30-3e199417388b" />
 <img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/957e7ceb-0852-43df-b7d2-3a57d117a7b7" />
@@ -287,7 +291,7 @@ Se agradece especialmente:
 <img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/5a37910d-7163-46c0-bbf8-908a21ae0e8a" />
 <img width="390" height="390" alt="image" src="https://github.com/user-attachments/assets/c96da523-8684-4000-80a8-90de89870dfa" />
 <img width="390" height="390" alt="image" src="https://github.com/user-attachments/assets/28c7b997-d6cf-4843-9490-b08bdbbfaad6" />
-
+</div>
 
 
 ---
