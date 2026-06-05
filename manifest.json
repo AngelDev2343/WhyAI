@@ -1,0 +1,25 @@
+{
+    "name": "WhyAI",
+    "short_name": "WhyAI",
+    "description": "Excelente IA generativa.",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#181818",
+    "theme_color": "#181818",
+    "orientation": "portrait",
+    "icons": [
+      {
+        "src": "icons/logo192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "icons/logo192.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ]
+
+  }
