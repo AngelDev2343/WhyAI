@@ -289,9 +289,8 @@ Se agradece especialmente:
 
 ## 🔗 Enlaces
 
-- 🌍 **Demo funcional:** https://angelsperez.github.io/ia-offline/
+- 🌍 **Demo funcional:** [https://angelsperez.github.io/ia-offline/](https://why-ia.vercel.app/online/)
 
-- 🧑‍💻 **Repositorio:** https://github.com/AngelSPerez/ia-offline
 
 ---
 
