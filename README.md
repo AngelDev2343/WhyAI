@@ -33,8 +33,6 @@
   <a href="#english"><img src="https://img.shields.io/badge/🇬🇧_English-white?style=flat-square" alt="English"></a>
 </p>
 
-<br>
-
 ---
 
 <a id="español"></a>
