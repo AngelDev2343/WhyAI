@@ -1,312 +1,314 @@
-# 🤖 WhyAI
 
-![Status](https://img.shields.io/badge/status-beta-orange)
-![Platform](https://img.shields.io/badge/platform-browser--only-blue)
-![Offline](https://img.shields.io/badge/offline-supported-success)
-![Privacy](https://img.shields.io/badge/privacy-no%20accounts%20%7C%20no%20backend-brightgreen)
-![PWA](https://img.shields.io/badge/PWA-supported-purple)
-![WASM](https://img.shields.io/badge/WebAssembly-WASM-blueviolet)
-![AI](https://img.shields.io/badge/AI-LLM%20Local%20%2B%20Cloud-informational)
 
-**WhyAI** es una plataforma de **Inteligencia Artificial generativa híbrida (offline + online)** que se ejecuta **completamente en el navegador**, diseñada para ofrecer **IA local, privada y accesible** a cualquier persona, sin necesidad de conocimientos técnicos.
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c96da523-8684-4000-80a8-90de89870dfa" alt="WhyAI" width="120" height="120">
+</p>
 
-El proyecto sigue una filosofía **privacy-first**: sin cuentas, sin backend propio y sin bases de datos externas. El control de los datos permanece siempre en manos del usuario.
+<p align="center">
+  <strong>WhyAI</strong>
+</p>
 
----
 
-## 📜 Licencia
+<p align="center">
+  <strong>Cada respuesta tiene un porqué.</strong> · <strong>Every answer has a why.</strong><br>
+  Asistente de IA híbrido — online en la nube u offline en tu dispositivo.<br>
+  Hybrid AI assistant — cloud online or fully offline on your device.
+</p>
 
-**Todos los derechos reservados**
+<p align="center">
+  <a href="https://why-ia.vercel.app"><img src="https://img.shields.io/badge/demo-why--ia.vercel.app-4ade80?style=for-the-badge" alt="Demo"></a>
+  <a href="https://why-ia.vercel.app/install.html"><img src="https://img.shields.io/badge/PWA-install-8b5cf6?style=for-the-badge" alt="Install PWA"></a>
+</p>
 
-Este proyecto **no es Open-Source** es únicamente creado con fines demostrativos.
+<p align="center">
+  <img src="https://img.shields.io/badge/status-active-success" alt="Active">
+  <img src="https://img.shields.io/badge/platform-web-blue" alt="Web">
+  <img src="https://img.shields.io/badge/offline-WASM-success" alt="Offline WASM">
+  <img src="https://img.shields.io/badge/languages-ES%20%7C%20EN-lightgrey" alt="ES / EN">
+  <img src="https://img.shields.io/badge/theme-light%20%2F%20dark-informational" alt="Light / dark theme">
+</p>
 
----
-
-## 🖥️ Demo
-
-<div align="center">
-  
-[¡Proba ahora aquí!](https://why-ia.vercel.app/online/)
-  
-![demo](https://angeldev2343.github.io/land/gifs/1.gif)
-<img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/6b882ab5-e14f-4616-be30-3e199417388b" />
-<img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/957e7ceb-0852-43df-b7d2-3a57d117a7b7" />
-<img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/b761831d-d455-4b98-af62-832684f25a21" />
-<img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/68c6badd-fbb8-406d-9f28-a931c9d62b75" />
-<img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/2ee729a1-c0ad-47a3-b534-6f109f7e2461" />
-<img width="1912" height="994" alt="image" src="https://github.com/user-attachments/assets/5a37910d-7163-46c0-bbf8-908a21ae0e8a" />
-<img width="390" height="390" alt="image" src="https://github.com/user-attachments/assets/c96da523-8684-4000-80a8-90de89870dfa" />
-<img width="390" height="390" alt="image" src="https://github.com/user-attachments/assets/28c7b997-d6cf-4843-9490-b08bdbbfaad6" />
-</div>
+<p align="center">
+  <a href="#español"><strong>Español</strong></a> · <a href="#english"><strong>English</strong></a>
+</p>
 
 ---
 
-## 🎯 Objetivo del proyecto
+<a id="español"></a>
 
-WhyAI nace como un **experimento técnico** con un objetivo claro:
+## Español
 
-> **Hacer accesible la IA local sin conexión para personas comunes**, eliminando configuraciones complejas y barreras técnicas.
+> **Nota sobre este repositorio:** este repositorio público contiene **documentación y presentación del proyecto**. El código fuente de WhyAI es **privado** y no se distribuye aquí.
 
-Muchas soluciones de IA offline están pensadas para perfiles expertos. WhyAI abstrae esa complejidad y la presenta en una interfaz simple, multiplataforma y usable.
+### Qué es WhyAI
 
----
+**WhyAI** es una aplicación web de chat con inteligencia artificial que combina dos mundos en una sola interfaz:
 
-## 🧠 Arquitectura general
+| Modo | Descripción |
+|------|-------------|
+| **Online** | Modelos avanzados en la nube (Groq), sincronización de conversaciones, cuenta de usuario y funciones Pro |
+| **Offline** | Modelos locales ejecutados en el navegador con **WebAssembly** (wllama), sin depender de internet tras descargar el modelo |
 
-WhyAI utiliza una **arquitectura híbrida**:
+Puedes cambiar de modo en cualquier momento desde el mismo chat. La app está disponible como **PWA** (Progressive Web App) para instalarla en móvil y escritorio.
 
-- **Modo Offline:** ejecución local de modelos LLM mediante WebAssembly
-- **Modo Online:** inferencia en la nube mediante APIs externas
+**Desarrollado por [WDG Technologies](https://why-ia.vercel.app)**
 
-Características comunes:
+### Características principales
 
-- Ejecución íntegra en el navegador
-- Sin backend propio
-- Misma interfaz para ambos modos
+**Chat inteligente**
+- Conversaciones con historial y memoria de contexto
+- Interfaz en **español e inglés** con detección automática de idioma
+- **Tema claro y oscuro** configurable
+- Formato enriquecido en respuestas (listas, código, etc.)
+- **Demo sin cuenta**: prueba el chat online con un límite de mensajes antes de registrarte
 
----
+**Modo online**
+- **WhyAI Fast** — modelo ligero (`llama-3.1-8b-instant`) para respuestas rápidas
+- **WhyAI Pro** — modelo avanzado (`llama-3.3-70b-versatile`) con mayor capacidad de razonamiento
+- Cuenta con **email/contraseña** o **Google** (Firebase Auth)
+- Conversaciones guardadas en la nube (Firestore)
+- Resumen automático de conversaciones largas
+- Límites de uso justos y transparentes en el servidor
 
-## 🔌 Modo Offline (IA Local)
+**Modo offline**
+- Ejecución local con **wllama** y modelos en **WebAssembly**
+- Descarga manual de modelos; se almacenan en caché del navegador
+- Sin conexión tras la descarga inicial del modelo
+- Parámetros avanzados de inferencia (temperatura, contexto, etc.) — **plan Pro**
+- Requiere inicio de sesión y navegadores compatibles con WASM multihilo
 
-El modo offline está basado en **wllama**, permitiendo ejecutar modelos LLM localmente usando **WebAssembly (WASM)** con soporte **multihilo**.
+**Multimodal — análisis de imágenes**  
+**WhyAI Duo** analiza imágenes adjuntas en el chat online: visión especializada → descripción estructurada → respuesta de texto. Disponible para usuarios **Free** y **Pro**.
 
-### Gestión de modelos
+**Generación de imágenes** *(solo Pro, modo online)*  
+1 imagen/día desde prompt de texto. Procesado en servidor de forma segura.
 
-- Descarga **manual** de modelos
-- El usuario puede:
-  - Descargar los **3 modelos disponibles**
-  - Descargar solo uno y usarlo exclusivamente
-- Los modelos se descargan una sola vez y se almacenan en la **caché del navegador**
+**Cuenta y configuración**  
+Perfil, idioma, tema, plan Pro, eliminación de cuenta.  
+Legal: [Términos](https://why-ia.vercel.app/terms.html) · [Privacidad](https://why-ia.vercel.app/privacy.html)
 
-### Modelos disponibles
+### Planes
 
-| Modelo | Tamaño | Rol | Descripción |
-|------|-------|-----|------------|
-| **LFM2 1.2B** | Ligero | Básico | Muy optimizado y rápido, con razonamiento limitado |
-| **LLaMA 3.2 1B** | Medio | Balanceado | Rápido e inteligente, recomendado por defecto |
-| **Gemma 2 2B** | Pesado | Avanzado | Mejor razonamiento, mayor consumo de memoria |
+| | **Free** | **Pro** |
+|---|:---:|:---:|
+| Precio | $0 | desde **$2.99/mes** (descuento anual) |
+| Mensajes | Ilimitados (Fast) | Ilimitados |
+| Mensajes Pro / día | 5 | Ilimitados |
+| Análisis de imágenes | ✓ | ✓ |
+| Memoria y contexto | Estándar | **3× mayor** |
+| Modo offline | Limitado | **Completo** |
+| Generación de imágenes | — | **1/día** |
+| Parámetros offline avanzados | — | ✓ |
 
-> Se descartaron modelos mayores (8B) debido a problemas de memoria en navegadores.
+### Modelos offline
 
-### Configuración avanzada
-
-- `max_tokens`
-- `temperature`
-- Otros parámetros de inferencia configurables por el usuario
-
-### Rendimiento y memoria
-
-- Control interno para evitar que el navegador se quede sin memoria
-- Selección de modelos basada en equilibrio entre calidad, estabilidad y consumo de recursos
-
----
-
-## ☁️ Modo Online (IA en la nube)
-
-El modo online utiliza inferencia remota mediante una API externa.
-
-### Detalles técnicos
-
-- Modelo: **LLaMA 4 70B**
-- Alta capacidad de razonamiento y generación de texto
-- Baja latencia
+| Modelo | Perfil | Descripción |
+|--------|--------|-------------|
+| **LFM2 1.2B** | Ligero | Muy rápido, poca RAM |
+| **LLaMA 3.2 1B** | Balanceado | Recomendado por defecto |
+| **Gemma 2 2B** | Avanzado | Mejor razonamiento, más RAM |
 
 ### Privacidad
 
-- La API **no guarda conversaciones**
-- Solo se registra el **uso técnico de la API**
-- No se utilizan identificadores de sesión propios
+| Dato | Dónde | Para qué |
+|------|-------|----------|
+| Cuenta y perfil | Firebase | Auth, plan Pro, preferencias |
+| Conversaciones online | Firestore | Sincronización entre dispositivos |
+| Demo sin cuenta | Local + servidor | Límite de prueba |
+| Modelos offline | Caché del navegador | Inferencia local |
+| Preferencias | `localStorage` | Tema, idioma |
+
+No vendemos datos ni usamos publicidad de terceros. [Política de Privacidad](https://why-ia.vercel.app/privacy.html)
+
+### PWA · Compatibilidad
+
+Instala desde [install.html](https://why-ia.vercel.app/install.html). Chrome, Edge, Safari y Brave soportan online y offline. **Firefox:** solo online.
+
+**Requisitos offline:** 4 GB RAM mín. · 6–8 GB recomendado · ~1.5 GB almacenamiento para modelos.
+
+### FAQ (ES)
+
+**¿Sin cuenta?** Demo de 3 mensajes. Para historial, offline completo y Pro → regístrate.  
+**¿Offline envía chats a internet?** No, tras descargar el modelo.  
+**¿Anuncios?** No.  
+**¿Código fuente?** Privado; este repo es solo documentación.
+
+### Enlaces
+
+| Recurso | URL |
+|---------|-----|
+| App | [why-ia.vercel.app](https://why-ia.vercel.app) |
+| Instalar | [install.html](https://why-ia.vercel.app/install.html) |
+| Precios | [pricing.html](https://why-ia.vercel.app/pricing.html) |
+| Reportar bug | [report-bug.html](https://why-ia.vercel.app/report-bug.html) |
+
+**Licencia:** Todos los derechos reservados © WDG Technologies. Software propietario.
+
+<p align="right"><a href="#english">English ↓</a></p>
 
 ---
 
-## 🖼️ WhyAI Duo (Texto + Visión)
+<a id="english"></a>
 
-**WhyAI Duo** es una implementación multimodal basada en el uso de **dos modelos especializados**, optimizados para sus respectivas tareas.
+## English
 
-### Flujo técnico
+> **About this repository:** this public repo contains **project documentation and presentation only**. WhyAI **source code is private** and is not distributed here.
 
-1. La imagen se convierte a **Base64**
-2. Se envía a una API de visión
-3. El modelo visual analiza la imagen
-4. Se genera una descripción detallada
-5. La imagen se elimina
-6. La descripción se envía al modelo especializado en texto
+### What is WhyAI
 
-Este enfoque permite obtener mejores respuestas textuales sin sobrecargar el modelo visual.
+**WhyAI** is a web-based AI chat application that combines two worlds in a single interface:
 
----
+| Mode | Description |
+|------|-------------|
+| **Online** | Advanced cloud models (Groq), conversation sync, user accounts, and Pro features |
+| **Offline** | Local models running in the browser via **WebAssembly** (wllama), no internet required after download |
 
-## 🎨 Generación de imágenes
+Switch modes anytime from the same chat. Available as a **PWA** (Progressive Web App) for mobile and desktop.
 
-WhyAI permite la **generación de imágenes** mediante una **API pública externa**, disponible **exclusivamente en modo online**.
+**Built by [WDG Technologies](https://why-ia.vercel.app)**
 
-### Funcionamiento técnico
+### Key features
 
-- El usuario introduce un **prompt de texto**
-- El prompt se envía directamente a la API
-- La generación ocurre en un **modal independiente**
-- El proceso es **bloqueante dentro del modal**
-- La imagen generada se muestra **en la parte inferior del mismo modal**
-- El usuario puede cerrar el modal y seguir usando el chat mientras la imagen se genera
-- El usuario decide si desea **descargarla**
+**Smart chat**
+- Conversations with history and context memory
+- **Spanish and English** UI with automatic language detection
+- Configurable **light and dark theme**
+- Rich response formatting (lists, code, etc.)
+- **Guest demo**: try online chat with a message limit before signing up
 
-### Características y limitaciones
+**Online mode**
+- **WhyAI Fast** — lightweight model (`llama-3.1-8b-instant`) for quick replies
+- **WhyAI Pro** — advanced model (`llama-3.3-70b-versatile`) with stronger reasoning
+- Sign in with **email/password** or **Google** (Firebase Auth)
+- Conversations saved in the cloud (Firestore)
+- Automatic summarization of long conversations
+- Fair, transparent server-side usage limits
 
-- Tipo de modelo: **no especificado por el proveedor**
-- Resolución y relación de aspecto: **fijas** (limitación de la API)
-- Solo se admite **texto**
-- Límite: **1 imágen por día** (limitación de la API)
-- El usuario es notificado al alcanzar el límite
+**Offline mode**
+- Local inference with **wllama** and **WebAssembly** models
+- Manual model download; stored in browser cache
+- Works offline after the initial model download
+- Advanced inference parameters (temperature, context, etc.) — **Pro plan**
+- Requires sign-in and browsers with multithreaded WASM support
 
-### Privacidad
+**Multimodal — image analysis**  
+**WhyAI Duo** analyzes images attached in online chat: specialized vision → structured description → text reply. Available for **Free** and **Pro** users.
 
-- La API **no almacena imágenes ni prompts**
-- Las imágenes no se pueden recuperar si no se descargan
-- WhyAI no guarda ni cachea imágenes generadas
+**Image generation** *(Pro only, online)*  
+1 image/day from a text prompt. Securely processed on the server.
 
----
+**Account & settings**  
+Profile, language, theme, Pro plan, account deletion.  
+Legal: [Terms](https://why-ia.vercel.app/terms.html) · [Privacy](https://why-ia.vercel.app/privacy.html)
 
-## 💾 Almacenamiento y persistencia
+### Plans
 
-### Caché del navegador
+| | **Free** | **Pro** |
+|---|:---:|:---:|
+| Price | $0 | from **$2.99/mo** (annual discount) |
+| Messages | Unlimited (Fast) | Unlimited |
+| Pro messages / day | 5 | Unlimited |
+| Image analysis | ✓ | ✓ |
+| Memory & context | Standard | **3× larger** |
+| Offline mode | Limited | **Full** |
+| Image generation | — | **1/day** |
+| Advanced offline params | — | ✓ |
 
-- Modelos de IA offline
-- Assets de la aplicación (HTML, recursos estáticos)
+### Offline models
 
-### LocalStorage
+| Model | Profile | Description |
+|--------|--------|-------------|
+| **LFM2 1.2B** | Light | Very fast, low RAM |
+| **LLaMA 3.2 1B** | Balanced | Default recommendation |
+| **Gemma 2 2B** | Advanced | Better reasoning, more RAM |
 
-- Cookie ligera para detectar primera visita
-- Usada únicamente para mostrar el mensaje de bienvenida
+### Privacy
 
-### IndexedDB (planificado)
+| Data | Where | Purpose |
+|------|-------|---------|
+| Account & profile | Firebase | Auth, Pro plan, preferences |
+| Online conversations | Firestore | Cross-device sync |
+| Guest demo | Local + server | Trial message limits |
+| Offline models | Browser cache | Local inference |
+| Preferences | `localStorage` | Theme, language |
 
-- Historial de chats
+We do not sell data or use third-party ads. [Privacy Policy](https://why-ia.vercel.app/privacy.html)
 
-### Eliminación de datos
+### PWA · Compatibility
 
-El usuario puede borrar todos los datos fácilmente usando las herramientas del navegador.
+Install via [install.html](https://why-ia.vercel.app/install.html). Chrome, Edge, Safari, and Brave support online and offline. **Firefox:** online only.
 
----
+**Offline requirements:** 4 GB RAM min · 6–8 GB recommended · ~1.5 GB storage for models.
 
-## 🔐 Privacidad y seguridad
+### Architecture
 
-- Sin cuentas
-- Sin base de datos externa
-- Sin anuncios
-- Sin venta de datos personales
+```
+User
+  ├─ Online ──► Vercel (serverless API) ──► Groq / Pollinations / Firebase
+  └─ Offline ─► wllama (browser WASM) ──► cached local models
+```
 
-### Recopilación de información
+Vanilla JS + bundled React (offline module) · Vercel serverless · Firebase Auth + Firestore · Groq API · wllama WASM
 
-- WhyAI **no recopila datos directamente**
-- Algunas APIs externas pueden registrar **uso técnico**
-- No se recopilan errores ni métricas propias
+### Bug reports
 
----
+Registered users: **Help → Report bug** or [report-bug.html](https://why-ia.vercel.app/report-bug.html).  
+This repo does **not** accept pull requests or external code contributions.
 
-## 💻 Requisitos recomendados
+### FAQ (EN)
 
-- **RAM:** 4GB recomendados (6GB o 8GB ideal)
-- **CPU:** Arquitectura x86 o ARM de **64 bits**
-- **Almacenamiento:** hasta 1.5 GB libres (para offline)
+**Without an account?** 3-message guest demo. For history, full offline, and Pro → sign up.  
+**Does offline send chats online?** No, after the model is downloaded.  
+**Ads?** No.  
+**Source code?** Private; this repo is documentation only.
 
----
+### Links
 
-## 🌍 Compatibilidad
+| Resource | URL |
+|----------|-----|
+| App | [why-ia.vercel.app](https://why-ia.vercel.app) |
+| Install | [install.html](https://why-ia.vercel.app/install.html) |
+| Pricing | [pricing.html](https://why-ia.vercel.app/pricing.html) |
+| Report bug | [report-bug.html](https://why-ia.vercel.app/report-bug.html) |
 
-### Navegadores recomendados
+**License:** All rights reserved © WDG Technologies. Proprietary software.
 
-- ✅ Safari
-- ✅ Google Chrome
-- ✅ Microsoft Edge
-
-❌ Firefox: no compatible actualmente con IA Offline.
-
-### Dispositivos probados
-
-- Windows 10 / 11
-- Linux (la mayoría de distribuciones)
-- macOS (Apple Silicon)
-- Android 11+
-- iOS 16+
-
-> macOS presenta mejor rendimiento debido a su arquitectura.
-
----
-
-## 📲 Instalación como PWA
-
-WhyAI puede instalarse como **Progressive Web App**, aunque es totalmente opcional.
-
-1. Abrir la web
-2. Añadir `install.html` a la URL
-3. Instalar desde el navegador
-
----
-
-## 🛠️ Estado del proyecto
-
-- **Estado:** Beta
-- **Naturaleza:** Experimental
-
-### Limitaciones conocidas
-
-- Descarga inicial pesada
-- Consumo de RAM en modelos grandes
-- Firefox no soportado
+<p align="right"><a href="#español">Español ↑</a></p>
 
 ---
 
-## 🚀 Cambios y mejoras futuras
+## Screenshots · Capturas
 
-- Integración de **WebGPU** para IA Offline
-- Historial de chats en modo online usando **IndexedDB**
-- Optimización de uso de memoria
-- Mejoras generales de rendimiento y estabilidad
+<p align="center">
+  <img width="900" alt="WhyAI — online chat" src="https://github.com/user-attachments/assets/0c596894-7ff4-49bc-83f8-6f879a2b55e8">
+</p>
 
----
+<p align="center">
+  <img width="900" alt="WhyAI — offline mode" src="https://github.com/user-attachments/assets/1499f493-c274-4735-ac0c-dc854c1647d9">
+  &nbsp;&nbsp;
+  <img width="900" alt="WhyAI — settings" src="https://github.com/user-attachments/assets/f42bc8a0-21e5-4531-a3a4-b0c7e2f50260">
+</p>
 
-## 🧪 Beta testing y reporte de errores
+<p align="center">
+  <img width="900" alt="WhyAI — mode switch" src="https://github.com/user-attachments/assets/db6d44ff-9bc5-49f9-92b7-74fd7c4f1acd">
+  &nbsp;&nbsp;
+  <img width="900" alt="WhyAI — pricing" src="https://github.com/user-attachments/assets/f2021afe-31e6-4447-81d1-794d652cb88e">
+</p>
 
-WhyAI se encuentra en fase **beta** y actualmente no acepta contribuciones de código.
-
-Se agradece especialmente:
-
-- 🐞 Reporte de bugs
-- 🧪 Feedback de beta testers
-- 📋 Reportes de compatibilidad y rendimiento
-
----
-
-## 🙏 Créditos
-
-- **wllama** — motor base para la ejecución de modelos LLM en el navegador (modo offline)
-- **Modelos**: LLaMA (Meta) y Gemma (Google).
-- **Stack**: Núcleo en Vanilla JS con integración de React para el módulo offline.
-- **Deploy** (Online): Vercel.
-- **Página Web**: GitHub Pages.
+<p align="center">
+  <img width="200" alt="WhyAI — mobile" src="https://github.com/user-attachments/assets/28c7b997-d6cf-4843-9490-b08bdbbfaad6">
+</p>
 
 ---
 
-## 🔗 Enlaces
+## Credits · Créditos
 
-- 🌍 **Demo funcional:** [https://angelsperez.github.io/ia-offline/](https://why-ia.vercel.app/online/)
+- **[wllama](https://github.com/ngxson/wllama)** — browser WASM LLM engine
+- **Meta (LLaMA)** & **Google (Gemma)** — offline model families
+- **Groq** — low-latency cloud inference
+- **Firebase** — auth & sync
+- **Vercel** — hosting & serverless APIs
 
-
----
-
-## ❓ FAQ
-
-### ¿WhyAI es realmente offline?
-Sí. Tras descargar el modelo, no requiere conexión.
-
-### ¿Se usan cuentas o registros?
-No. Por diseño.
-
-### ¿Por qué no hay base de datos externa?
-Por privacidad y seguridad.
-
-### ¿WhyAI tiene anuncios?
-No, ni los tendrá.
-
-### ¿Es un producto comercial?
-No. Es un experimento técnico.
+<p align="center">
+  <sub>WhyAI — developed by WDG Technologies · desarrollado por WDG Technologies</sub>
+</p>
