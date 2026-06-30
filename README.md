@@ -1,7 +1,7 @@
 
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/c96da523-8684-4000-80a8-90de89870dfa" alt="WhyAI" width="120" height="120">
+  <img width="256" height="256" alt="image" src="https://github.com/user-attachments/assets/2cd97dad-361f-4aa4-a98e-93db305b06bd" />
 </p>
 
 <p align="center">
